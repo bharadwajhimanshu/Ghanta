@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ghanta.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,7 @@ namespace Ghanta
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new HomeTabbedPage();
         }
 
         protected override void OnStart()
