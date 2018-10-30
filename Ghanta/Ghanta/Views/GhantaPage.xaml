@@ -3,10 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ghanta.Views.GhantaPage" Title="Home">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout VerticalOptions="Center" Padding="50" Margin="20">
+            <Image x:Name="GhantaImage" Source="Ghanta.png"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

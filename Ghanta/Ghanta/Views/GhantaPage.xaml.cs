@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AppCenter.Crashes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,15 +20,12 @@ namespace Ghanta.Views
         /// <summary>
         /// This variable sets the speed of the Accelerometer updates
         /// </summary>
-        SensorSpeed speed = SensorSpeed.Fastest;
+        SensorSpeed speed = SensorSpeed.Normal;
 
 		public GhantaPage ()
 		{
 			InitializeComponent ();
-
-            Accelerometer.ReadingChanged += AccelerometerReadingChanged;
-
-		}
+        }
 
         /// <summary>
         /// Start Accelerometer when page is being viewed
@@ -35,7 +33,19 @@ namespace Ghanta.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Accelerometer.Start(speed);
+            try
+            {
+                Accelerometer.ReadingChanged += AccelerometerReadingChanged;
+                Accelerometer.Start(speed);
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                Crashes.TrackError(fnsEx, new Dictionary<string, string>());
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex, new Dictionary<string, string>());
+            }
         }
 
         /// <summary>
@@ -54,7 +64,16 @@ namespace Ghanta.Views
         /// <param name="e">Use this variable to get rotation details</param>
         private void AccelerometerReadingChanged(object sender, AccelerometerChangedEventArgs e)
         {
-            
+            if (e.Reading.Acceleration.X > 0.1 || e.Reading.Acceleration.X < -0.1)
+            {
+                GhantaImage.Rotation = e.Reading.Acceleration.X * 30;
+            }
+            else
+            {
+                GhantaImage.RotationX = 0;
+                GhantaImage.RotationY = 0;
+                GhantaImage.Rotation = 0;
+            }
         }
     }
 }
