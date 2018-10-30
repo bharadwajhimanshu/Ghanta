@@ -10,6 +10,7 @@ namespace Ghanta.Views
         public HomeTabbedPage()
         {
             this.Children.Add(new GhantaPage());
+            this.Children.Add(new WhyPage());
             this.Children.Add(new AboutPage());
         }
     }

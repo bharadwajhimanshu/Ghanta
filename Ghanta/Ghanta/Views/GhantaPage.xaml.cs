@@ -1,7 +1,9 @@
 ﻿using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -21,8 +23,10 @@ namespace Ghanta.Views
         /// This variable sets the speed of the Accelerometer updates
         /// </summary>
         SensorSpeed speed = SensorSpeed.Normal;
+        Stream bellSound;
+        Plugin.SimpleAudioPlayer.ISimpleAudioPlayer player;
 
-		public GhantaPage ()
+        public GhantaPage ()
 		{
 			InitializeComponent ();
         }
@@ -37,6 +41,10 @@ namespace Ghanta.Views
             {
                 Accelerometer.ReadingChanged += AccelerometerReadingChanged;
                 Accelerometer.Start(speed);
+                var assembly = typeof(App).GetTypeInfo().Assembly;
+                bellSound = assembly.GetManifestResourceStream("Ghanta.Audio." + "Bell.mp3");
+                player = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
+                player.Load(bellSound);
             }
             catch (FeatureNotSupportedException fnsEx)
             {
@@ -55,6 +63,8 @@ namespace Ghanta.Views
         {
             base.OnDisappearing();
             Accelerometer.Stop();
+            bellSound = null;
+            player = null;
         }
 
         /// <summary>
@@ -64,15 +74,21 @@ namespace Ghanta.Views
         /// <param name="e">Use this variable to get rotation details</param>
         private void AccelerometerReadingChanged(object sender, AccelerometerChangedEventArgs e)
         {
-            if (e.Reading.Acceleration.X > 0.1 || e.Reading.Acceleration.X < -0.1)
+            if (e.Reading.Acceleration.X > 0.45 || e.Reading.Acceleration.X < -0.45)
             {
                 GhantaImage.Rotation = e.Reading.Acceleration.X * 30;
+                if (!player.IsPlaying)
+                {
+                    player.Play();
+                }
+
             }
             else
             {
                 GhantaImage.RotationX = 0;
                 GhantaImage.RotationY = 0;
                 GhantaImage.Rotation = 0;
+                
             }
         }
     }

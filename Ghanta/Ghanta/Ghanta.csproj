@@ -10,9 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Audio\Bell.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Audio\Bell.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter" Version="1.10.0" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.10.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.10.0" />
+    <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.1.0" />
     <PackageReference Include="Xamarin.Essentials" Version="0.11.0-preview" />
     <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540" />
   </ItemGroup>
@@ -22,6 +33,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\GhantaPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\WhyPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
